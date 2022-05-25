@@ -1,0 +1,61 @@
+from tkinter import *
+from tkinter import ttk
+import tkinter as tk
+import mysql.connector 
+con = mysql.connector.connect(host="localhost",user="root",password="root",database="project")
+cursor = con.cursor()
+def brands():
+      result=cursor.execute('select * from mobilebrands')
+      my_w = tk.Tk()
+      my_w.geometry('700x400')
+      my_w.eval('tk::PlaceWindow .  center')
+      my_w.title("Mobile Hunt")
+      trv=ttk.Treeview(my_w,selectmode='browse')
+      trv.grid(row=1,column=1,padx=20,pady=20)
+      trv["columns"]=("1","2")
+      trv['show']='headings'
+      trv.column("1",width=30,anchor='c')
+      trv.column("2",width=80,anchor='c')
+      trv.heading("1",text='id')
+      trv.heading("2",text='brands')
+      result = cursor.fetchall()
+      trv.place(x=10,y=113)
+      for dt in result:
+            trv.insert("",'end',iid=dt[0],values=(dt[0],dt[1]))
+      my_w.mainloop()
+def login():
+    uname=username.get()
+    pwd=password.get()
+    if uname=='' or pwd=='':
+        message.set("fill the empty field!!!")
+    else:
+      if uname=="dhanush" and pwd=="12345":
+       login_screen.destroy()     
+       brands() 
+      elif uname=="dhanan" and pwd=="12345":
+       login_screen.destroy()        
+       brands()
+      else:
+       message.set("Wrong username or password!!!")
+def Loginform():
+    global login_screen
+    login_screen = Tk()
+    login_screen.title("Mobile Hunt")
+    login_screen.geometry("700x400")
+    login_screen.eval('tk::PlaceWindow .  center')
+    global  message;
+    global username
+    global password
+    username = StringVar()
+    password = StringVar()
+    message=StringVar()
+    Label(login_screen,width="300", text="WELCOME TO MOBILE HUNT", bg="orange",fg="white").pack()
+    Label(login_screen, text="Admin * ").place(x=20,y=40)
+    Entry(login_screen, textvariable=username).place(x=132,y=42)
+    Label(login_screen, text="Password * ").place(x=20,y=80)
+    Entry(login_screen, textvariable=password ,show="*").place(x=132,y=82)
+    Label(login_screen, text="",textvariable=message).place(x=95,y=100)
+    Button(login_screen, text="Login", width=10, height=1, bg="orange",command=login).place(x=151,y=130)
+    login_screen.mainloop()
+Loginform()
+
